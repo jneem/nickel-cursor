@@ -45,6 +45,9 @@ pub struct CursorTheme {
 pub fn load_theme(path: impl AsRef<Path>) -> anyhow::Result<CursorTheme> {
     let mut prog: Program<CacheImpl> =
         Program::new_from_file(path.as_ref().to_owned(), std::io::stderr())?;
+    if let Ok(nickel_path) = std::env::var("NICKEL_IMPORT_PATH") {
+        prog.add_import_paths(nickel_path.split(':'));
+    }
     let export = prog.eval_full_for_export().unwrap(); // FIXME
     let json = serde_json::to_string(&export)?;
     Ok(serde_json::from_str(&json)?)
