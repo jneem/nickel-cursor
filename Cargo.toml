@@ -1,0 +1,17 @@
+[package]
+name = "nickel-cursor"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.80"
+clap = { version = "4.5.1", features = ["derive"] }
+image = { version = "0.24.9", default-features = false }
+nickel-lang-core = "0.5.0"
+serde = { version = "1.0.197", features = ["derive"] }
+serde-transcode = "1.1.1"
+serde_json = "1.0.114"
+svgtypes = "0.14.0"
+tiny-skia = { version = "0.11.4", default-features = false, features = ["std", "simd", "png-format"] }
