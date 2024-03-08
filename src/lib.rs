@@ -40,6 +40,7 @@ pub struct CursorTheme {
     pub cursors: HashMap<String, Cursor>,
     pub style: Style,
     pub name: String,
+    pub links: HashMap<String, String>,
 }
 
 pub fn load_theme(path: impl AsRef<Path>) -> anyhow::Result<CursorTheme> {

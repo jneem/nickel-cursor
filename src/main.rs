@@ -36,6 +36,12 @@ pub fn main() -> anyhow::Result<()> {
         nickel_cursor::xcursor::write(out_file, &[image])?;
     }
 
+    for (name, target) in theme.links {
+        let source_path = cursor_dir.join(name);
+        // TODO: support windows
+        std::os::unix::fs::symlink(target, source_path)?;
+    }
+
     write_theme_file(theme_dir.join("cursor.theme"), &theme.name)?;
     write_theme_file(theme_dir.join("index.theme"), &theme.name)?;
     Ok(())

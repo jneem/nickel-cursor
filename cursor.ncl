@@ -86,6 +86,53 @@ in
     name | String,
     cursors | CursorSet,
     style | Style,
+    links | default
+    | doc "A collection of cursor name aliases. I don't know of a canonical reference, so just copied from Adwaita."
+    = {
+      "00008160000006810000408080010102" = "sb_v_double_arrow",
+      "028006030e0e7ebffc7f7070c0600140" = "sb_h_double_arrow",
+      "08e8e1c95fe2fc01f976f1e063a24ccd" = "left_ptr_watch",
+      "14fef782d02440884392942c11205230" = "sb_h_double_arrow",
+      "2870a09082c103050810ffdffffe0204" = "sb_v_double_arrow",
+      "3ecb610c1bf2410f44200f48c40d3599" = "left_ptr_watch",
+      "9d800788f1b08800ae810202380a0822" = "hand2",
+      "arrow" = "left_ptr",
+      c7088f0f3e6c8088236ef8e1e3e70000 = "bd_double_arrow",
+      col-resize = "sb_h_double_arrow",
+      "default" = "left_ptr",
+      double_arrow = "sb_v_double_arrow",
+      e29285e634086352946a0e7090d73106 = "hand2",
+      ew-resize = "sb_h_double_arrow",
+      fcf1c3c7cd4491d801f1e1c78f100000 = "fd_double_arrow",
+      grab = "hand1",
+      ibeam = "xterm",
+      n-resize = "top_side",
+      ne-resize = "top_right_corner",
+      nesw-resize = "fd_double_arrow",
+      ns-resize = "sb_v_double_arrow",
+      nw-resize = "top_left_corner",
+      nwse-resize = "bd_double_arrow",
+      openhand = "left_ptr",
+      pointer = "hand2",
+      pointing_hand = "hand2",
+      progress = "left_ptr_watch",
+      row-resize = "sb_v_double_arrow",
+      s-resize = "bottom_side",
+      se-resize = "bottom_right_corner",
+      size_bdiag = "fd_double_arrow",
+      size_fdiag = "bd_double_arrow",
+      size_hor = "sb_h_double_arrow",
+      size_ver = "sb_v_double_arrow",
+      split_h = "sb_h_double_arrow",
+      split_v = "sb_v_double_arrow",
+      sw-resize = "bottom_left_corner",
+      text = "xterm",
+      top_left_arrow = "left_ptr",
+      up_arrow = "sb_up_arrow",
+      b_double_arrow = "sb_v_double_arrow",
+      w-resize = "left_side",
+      wait = "watch",
+    },
   },
 
   Style
@@ -104,6 +151,8 @@ in
     "%
   = {
     left_ptr | Cursor | doc "The default cursor",
+    left_ptr_watch | Cursor | doc "The default cursor, but busy",
+    hand1 | Cursor | doc "Open hand",
     hand2 | Cursor | doc "Pointing hand",
     xterm | Cursor | doc "Text caret",
 
@@ -116,6 +165,14 @@ in
     right_side | Cursor | default = rotate 90 top_side,
     bottom_side | Cursor | default = rotate 180 top_side,
     left_side | Cursor | default = rotate 270 top_side,
+
+    # In Adwaita, these aren't links; they're a bit different. We default them to be aliases, so that the lazy
+    # cursor designer can skip them
+    watch | Cursor | default = left_ptr_watch,
+    sb_up_arrow | Cursor | default = top_side,
+    sb_right_arrow | Cursor | default = right_side,
+    sb_down_arrow | Cursor | default = bottom_side,
+    sb_left_arrow | Cursor | default = left_side,
 
     bd_double_arrow
       | Cursor
