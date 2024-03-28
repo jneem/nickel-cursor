@@ -5,9 +5,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     fenix.url = "github:nix-community/fenix";
     flake-utils.url = "github:numtide/flake-utils";
+    nickel.url = "github:tweag/nickel";
   };
 
-  outputs = { nixpkgs, fenix, flake-utils, ... }:
+  outputs = { nixpkgs, fenix, flake-utils, nickel, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         overlays = [ fenix.overlays.default ];
@@ -50,7 +51,8 @@
         devShells.default = mkShell {
           buildInputs = [
             cargo-outdated
-            nickel
+            nickel.packages.${system}.nickel-lang-cli
+            nickel.packages.${system}.lsp-nls
             nls
             rust-toolchain
           ];

@@ -1,4 +1,7 @@
-use std::{collections::HashMap, path::Path};
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
 
 use nickel_lang_core::{eval::cache::CacheImpl, program::Program};
 use tiny_skia::{Mask, Paint, PathBuilder, Pixmap, Stroke, Transform};
@@ -43,13 +46,40 @@ pub struct CursorTheme {
     pub links: HashMap<String, String>,
 }
 
-pub fn load_theme(path: impl AsRef<Path>) -> anyhow::Result<CursorTheme> {
+pub enum LoadError {
+    Io {
+        path: PathBuf,
+        err: std::io::Error,
+    },
+    Nickel {
+        prog: Program<CacheImpl>,
+        err: nickel_lang_core::error::Error,
+    },
+    Bug {
+        err: anyhow::Error,
+    },
+}
+
+impl From<serde_json::Error> for LoadError {
+    fn from(err: serde_json::Error) -> Self {
+        LoadError::Bug { err: err.into() }
+    }
+}
+
+pub fn load_theme(path: impl AsRef<Path>) -> Result<CursorTheme, LoadError> {
     let mut prog: Program<CacheImpl> =
-        Program::new_from_file(path.as_ref().to_owned(), std::io::stderr())?;
+        Program::new_from_file(path.as_ref().to_owned(), std::io::stderr()).map_err(|err| {
+            LoadError::Io {
+                path: path.as_ref().to_owned(),
+                err,
+            }
+        })?;
     if let Ok(nickel_path) = std::env::var("NICKEL_IMPORT_PATH") {
         prog.add_import_paths(nickel_path.split(':'));
     }
-    let export = prog.eval_full_for_export().unwrap(); // FIXME
+    let export = prog
+        .eval_full_for_export()
+        .map_err(|err| LoadError::Nickel { prog, err })?;
     let json = serde_json::to_string(&export)?;
     Ok(serde_json::from_str(&json)?)
 }
