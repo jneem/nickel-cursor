@@ -50,11 +50,11 @@ pub fn main() -> anyhow::Result<()> {
     std::fs::create_dir_all(&cursor_dir)
         .with_context(|| format!("when creating output directory {}", cursor_dir.display()))?;
     for (name, cursor) in theme.cursors {
-        let image = render_cursor(&cursor, &theme.style)?;
+        let images = render_cursor(&cursor, &theme.style)?;
         let out_path = cursor_dir.join(name);
         let out_file = File::create(&out_path)
             .with_context(|| format!("when opening file {}", out_path.display()))?;
-        nickel_cursor::xcursor::write(out_file, &[image])
+        nickel_cursor::xcursor::write(out_file, &images)
             .with_context(|| format!("while rendering output file {}", out_path.display()))?;
     }
 

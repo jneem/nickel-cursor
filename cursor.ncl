@@ -138,7 +138,7 @@ in
   Style
   | doc "Options for styling cursors"
   = {
-    size | Number | doc "Cursor size in pixels. (All cursor images will be square.)",
+    sizes | Array Number | doc "Cursor size in pixels. (All cursor images will be square.)",
     fill_color | Color,
     stroke_width | Number,
     stroke_color | Color,

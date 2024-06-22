@@ -2,10 +2,11 @@
   description = "Basic rust dev shell";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     fenix.url = "github:nix-community/fenix";
+    fenix.inputs.nixpkgs.follows = "nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
     nickel.url = "github:tweag/nickel";
+    nickel.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { nixpkgs, fenix, flake-utils, nickel, ... }:
@@ -52,7 +53,7 @@
           buildInputs = [
             cargo-outdated
             nickel.packages.${system}.nickel-lang-cli
-            nickel.packages.${system}.lsp-nls
+            nickel.packages.${system}.nickel-lang-lsp
             nls
             rust-toolchain
           ];

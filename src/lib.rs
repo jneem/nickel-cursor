@@ -32,7 +32,7 @@ pub struct Cursor {
 
 #[derive(serde::Deserialize, Debug)]
 pub struct Style {
-    pub size: u32,
+    pub sizes: Vec<u32>,
     pub fill_color: Color,
     pub stroke_width: f64,
     pub stroke_color: Color,
@@ -115,15 +115,27 @@ fn transform(deg: f64, nominal_scale: f64) -> Transform {
         .post_scale(nominal_scale as f32 / 256.0, nominal_scale as f32 / 256.0)
 }
 
-pub fn render_cursor(cursor: &Cursor, style: &Style) -> anyhow::Result<CursorImage> {
-    let mut pixmap = Pixmap::new(style.size, style.size).unwrap();
+pub fn render_cursor(cursor: &Cursor, style: &Style) -> anyhow::Result<Vec<CursorImage>> {
+    style
+        .sizes
+        .iter()
+        .map(|s| render_cursor_one_size(cursor, style, *s))
+        .collect()
+}
+
+fn render_cursor_one_size(
+    cursor: &Cursor,
+    style: &Style,
+    size: u32,
+) -> anyhow::Result<CursorImage> {
+    let mut pixmap = Pixmap::new(size, size).unwrap();
 
     let mut paint = Paint::default();
     let Color { r, g, b, a } = style.fill_color;
     paint.set_color_rgba8(r as u8, g as u8, b as u8, a as u8);
 
-    let mut mask = Mask::new(style.size, style.size).unwrap();
-    let transform = transform(cursor.rotation_degrees, style.size as f64);
+    let mut mask = Mask::new(size, size).unwrap();
+    let transform = transform(cursor.rotation_degrees, size as f64);
 
     for path in &cursor.paths {
         let path = parse_path(path)?;
@@ -154,7 +166,7 @@ pub fn render_cursor(cursor: &Cursor, style: &Style) -> anyhow::Result<CursorIma
 
     Ok(CursorImage {
         image: pixmap,
-        xhot: (hot_p.x.round() + style.size as f32 / 2.0) as u32,
-        yhot: (hot_p.y.round() + style.size as f32 / 2.0) as u32,
+        xhot: (hot_p.x.round() + size as f32 / 2.0) as u32,
+        yhot: (hot_p.y.round() + size as f32 / 2.0) as u32,
     })
 }
