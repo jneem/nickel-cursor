@@ -75,7 +75,7 @@ fn write_image(mut out: &mut dyn io::Write, img: &CursorImage) -> io::Result<()>
     out.write_u32(img.image.height())?;
     out.write_u32(img.xhot)?;
     out.write_u32(img.yhot)?;
-    out.write_u32(0)?; // delay
+    out.write_u32(1)?; // delay
     for p in img.image.pixels() {
         out.write_all(&[p.blue(), p.green(), p.red(), p.alpha()])?;
     }
