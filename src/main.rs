@@ -20,7 +20,7 @@ fn write_theme_file(path: impl AsRef<Path>, name: &str) -> anyhow::Result<()> {
     let mut file = File::create(path.as_ref())?;
     writeln!(&mut file, "[Icon Theme]")?;
     writeln!(&mut file, "Name={name}")?;
-    writeln!(&mut file, "Inherits=\"hicolor\"")?;
+    writeln!(&mut file, "Inherits=hicolor")?;
     Ok(())
 }
 
